@@ -8,9 +8,6 @@ import pytest
 from locators.locators import *
 
 WAIT_TIME = 10
-PASSWORD_NEGATIVE = '1'
-FIO = 'Петров Александр Александрович'
-
 
 @pytest.mark.UI
 class TestMain(BaseCase):
@@ -25,19 +22,17 @@ class TestMain(BaseCase):
     def test_negative_login(self, driver, negative_preconditions_login):
         sign_in = self.find(by=By.XPATH, what=LOCATOR_LOGIN_BUTTON)
         sign_in.click()
-        try:
-            WebDriverWait(driver, WAIT_TIME).until(ec.element_to_be_clickable((By.XPATH, LOCATOR_RIGHT_MODULE)))
-        except TimeoutException:
-            print('Login was unsuccessful')
+        self.find(by=By.XPATH, what=LOCATOR_REG)
 
     def test_negative_incorrect_password(self, driver, negative_preconditions_login):
+        password_negative = '1'
         email = self.find(by=By.XPATH, what=LOCATOR_LOGIN_EMAIL_INPUT)
         email.click()
-        email.send_keys(PASSWORD_NEGATIVE)
+        email.send_keys(password_negative)
         time.sleep(10)
         password = self.find(by=By.XPATH, what=LOCATOR_LOGIN_PASSWORD_INPUT)
         password.click()
-        password.send_keys(PASSWORD_NEGATIVE)
+        password.send_keys(password_negative)
         sign_in = self.find(by=By.XPATH, what=LOCATOR_LOGIN_BUTTON)
         sign_in.click()
         self.find(by=By.XPATH, what=LOCATOR_ERROR_PASSWORD_NOTIFICATION)
@@ -47,7 +42,7 @@ class TestMain(BaseCase):
         profile.click()
         surname_input = self.find(by=By.XPATH, what=LOCATOR_SURNAME_INPUT)
         surname_input.clear()
-        surname_input.send_keys(FIO)
+        surname_input.send_keys('Петров Александр Александрович')
         save_button = self.find(by=By.XPATH, what=LOCATOR_SAVE_PROFILE_BUTTON)
         save_button.click()
         driver.refresh()
