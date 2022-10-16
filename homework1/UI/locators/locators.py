@@ -10,7 +10,7 @@ LOCATOR_ERROR_PASSWORD_NOTIFICATION = "//*[contains(@class, 'formMsg') and conta
 LOCATOR_PROFILE = "//*[contains(@class, 'center-module-button') and contains(@class,'center-module-profile')]"
 LOCATOR_STAT = "//*[@href='/statistics']"
 LOCATOR_SURNAME_INPUT = "//*[contains(@class, 'input__inp') and contains(@class,'js-form-element')]"
-LOCATOR_PRICE_LIST = "//*[@href='/segments/price_list']"
+LOCATOR_GEO = "//*[@href='/segments']"
 LOCATOR_SAVE_PROFILE_BUTTON = "//*[contains(@class, 'button') and contains(@class,'button_submit')]"
 LOCATOR_FIO = "//*[@title='Петров Александр Александрович']"
 LOCATOR_SEGMENTS = "//*[contains(@class, 'center-module-button') and contains(@class,'center-module-segments')]"
