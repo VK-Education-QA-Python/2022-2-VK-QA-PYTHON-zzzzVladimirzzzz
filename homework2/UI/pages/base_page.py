@@ -15,36 +15,23 @@ class BasePage(object):
         return WebDriverWait(self.driver, timeout=timeout)
 
     def find(self, locator, timeout=None):
-        return self.wait(timeout).until(ec.presence_of_element_located(locator))
+        chance_find = 10
+        time_finds = 0.01
+        try:
+            for _ in range(chance_find):
+                return self.wait(timeout).until(ec.element_to_be_clickable(locator))
+        except TimeoutException:
+            time.sleep(time_finds)
 
     def click(self, locator, timeout=None):
-        send_clicks = 5
-        time_clicks = 0.01
-        for _ in range(send_clicks):
-            try:
-                self.find(locator, timeout=timeout)
-                elem = self.wait(timeout).until(ec.element_to_be_clickable(locator))
-                elem.click()
-                break
-            except TimeoutException:
-                time.sleep(time_clicks)
-        else:
-            raise TimeoutException
+        self.find(locator, timeout=timeout)
+        elem = self.wait(timeout).until(ec.element_to_be_clickable(locator))
+        elem.click()
 
-    def send_keys(self, locator, send_input, timeout=None):
-        send_clicks = 5
-        time_clicks = 0.01
-        for _ in range(send_clicks):
-            try:
-                self.find(locator, timeout=timeout)
-                elem = self.wait(timeout).until(ec.element_to_be_clickable(locator))
-                elem.clear()
-                elem.send_keys(send_input)
-                break
-            except TimeoutException:
-                time.sleep(time_clicks)
-        else:
-            raise TimeoutException
+    def send_keys(self, locator, send_input):
+        elem = self.find(locator=locator)
+        elem.clear()
+        elem.send_keys(send_input)
 
     def file_upload(self, locator, file_path):
         elem = self.driver.find_element(*locator)

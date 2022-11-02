@@ -1,7 +1,6 @@
-from UI.fixtures import *
-from contextlib import contextmanager
 from _pytest.fixtures import FixtureRequest
-
+from contextlib import contextmanager
+from UI.fixtures import *
 from UI.pages.base_page import BasePage
 from UI.pages.campaign_page import CampaignsPage
 from UI.pages.segment_page import SegmentPage

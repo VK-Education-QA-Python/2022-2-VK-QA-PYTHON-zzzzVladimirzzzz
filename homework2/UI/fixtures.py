@@ -2,14 +2,11 @@ import pytest
 from selenium import webdriver
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.chrome.options import Options
-import time
 from UI.pages.base_page import BasePage
 from UI.pages.campaign_page import CampaignsPage
 from UI.pages.segment_page import SegmentPage
 from UI.locators.basic_locators import *
-
-
-WAIT_TIME = 10
+from UI.files.creds import creds
 
 
 @pytest.fixture()
@@ -25,7 +22,6 @@ def driver(request):
     driver = webdriver.Chrome(executable_path=ChromeDriverManager().install(), options=options)
     driver.get(url)
     driver.maximize_window()
-    time.sleep(10)
     yield driver
     driver.quit()
 
@@ -33,7 +29,7 @@ def driver(request):
 @pytest.fixture()
 def cookies(driver):
     login_page = LoginPage(driver)
-    login_page.login(user="povarov.vova99@gmail.com", password="Password!")
+    login_page.login(user=creds[0], password=creds[1])
     cookies = driver.get_cookies()
     return cookies
 
@@ -44,10 +40,7 @@ class LoginPage(BasePage):
         self.click((By.XPATH, LOCATOR_LOGIN_MENU))
         self.find((By.XPATH, LOCATOR_LOGIN_EMAIL_INPUT)).send_keys(user)
         self.find((By.XPATH, LOCATOR_LOGIN_PASSWORD_INPUT)).send_keys(password)
-
         self.click((By.XPATH, LOCATOR_LOGIN_BUTTON))
-
-        time.sleep(5)
         return BasePage(driver=driver)
 
 
@@ -59,3 +52,13 @@ def campaign_page(driver):
 @pytest.fixture()
 def segment_page(driver):
     return SegmentPage(driver=driver)
+
+
+@pytest.fixture()
+def create_picture_path(repo_root):
+    return os.path.join(repo_root, 'UI', 'files', 'picture.jpeg')
+
+
+@pytest.fixture()
+def create_audio_path(repo_root):
+    return os.path.join(repo_root, 'UI', 'files', 'audio.mp3')

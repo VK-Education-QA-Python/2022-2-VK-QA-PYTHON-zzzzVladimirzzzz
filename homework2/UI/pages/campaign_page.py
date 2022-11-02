@@ -12,4 +12,14 @@ class CampaignsPage(BasePage):
         self.click(locator=CampaignPageLocators.LOCATOR_SAVE_PICTURE_BUTTON)
         self.file_upload(locator=CampaignPageLocators.LOCATOR_UPLOAD_AUDIO, file_path=file_path_audio)
         self.click(locator=CampaignPageLocators.LOCATOR_CREATE_CAMPAIGN_BUTTON)
+        self.driver.refresh()
 
+    def find_campaign(self, campaign_name):
+        self.send_keys(locator=CampaignPageLocators.LOCATOR_FIND_CAMPAIGN, send_input=campaign_name)
+        self.click(locator=CampaignPageLocators.LOCATOR_CONFIRM_FIND)
+
+    def delete_campaign(self):
+        self.click(locator=CampaignPageLocators.LOCATOR_CAMPAIGN_CHECKBOX)
+        self.click(locator=CampaignPageLocators.LOCATOR_CAMPAIGN_MODULE_DELETE)
+        self.click(locator=CampaignPageLocators.LOCATOR_CAMPAIGN_DELETE_BUTTON)
+        self.driver.refresh()
