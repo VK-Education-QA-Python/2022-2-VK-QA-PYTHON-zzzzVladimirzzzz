@@ -1,7 +1,8 @@
 import time
-from selenium.webdriver.support.wait import WebDriverWait
-from selenium.webdriver.support import expected_conditions as ec
+
 from selenium.common.exceptions import TimeoutException
+from selenium.webdriver.support import expected_conditions as ec
+from selenium.webdriver.support.wait import WebDriverWait
 
 
 class BasePage(object):
@@ -15,13 +16,12 @@ class BasePage(object):
         return WebDriverWait(self.driver, timeout=timeout)
 
     def find(self, locator, timeout=None):
-        chance_find = 10
-        time_finds = 0.01
-        try:
-            for _ in range(chance_find):
+        start_time = time.time() + 5
+        while start_time > time.time():
+            try:
                 return self.wait(timeout).until(ec.element_to_be_clickable(locator))
-        except TimeoutException:
-            time.sleep(time_finds)
+            except TimeoutException:
+                continue
 
     def click(self, locator, timeout=None):
         self.find(locator, timeout=timeout)

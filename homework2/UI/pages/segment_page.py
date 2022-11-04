@@ -1,6 +1,7 @@
-from selenium.common.exceptions import TimeoutException, NoSuchElementException
-from UI.pages.base_page import BasePage
+from selenium.common.exceptions import TimeoutException
+
 from UI.locators.basic_locators import *
+from UI.pages.base_page import BasePage
 
 
 class SegmentPage(BasePage):
@@ -39,14 +40,11 @@ class SegmentPage(BasePage):
         self.send_keys(locator=SegmentPageLocators.LOCATOR_FIND_DATA_SOURCE, send_input=group_name)
 
     def create_group_data_sources(self, data_group_url):
-        try:
-            self.click(locator=SegmentPageLocators.LOCATOR_GROUPS)
-            self.send_keys(locator=SegmentPageLocators.LOCATOR_INPUT_GROUP, send_input=data_group_url)
-            self.click(locator=SegmentPageLocators.LOCATOR_SELECT_ALL)
-            self.click(locator=SegmentPageLocators.LOCATOR_ADD_CHOSEN_GROUP, timeout=5)
-            self.driver.refresh()
-        except NoSuchElementException:
-            print('Such a data source has already been created')
+        self.click(locator=SegmentPageLocators.LOCATOR_GROUPS)
+        self.send_keys(locator=SegmentPageLocators.LOCATOR_INPUT_GROUP, send_input=data_group_url)
+        self.click(locator=SegmentPageLocators.LOCATOR_SELECT_ALL)
+        self.click(locator=SegmentPageLocators.LOCATOR_ADD_CHOSEN_GROUP, timeout=5)
+        self.driver.refresh()
 
     def delete_data_source(self, source_name):
         self.click(locator=SegmentPageLocators.LOCATOR_GROUPS)

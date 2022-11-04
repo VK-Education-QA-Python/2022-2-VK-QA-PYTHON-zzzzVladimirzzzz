@@ -1,5 +1,6 @@
 from selenium.webdriver.common.by import By
-from UI.entity_functions.entity_generation import *
+
+from UI.utils.utils import *
 
 
 class BasePageLocators:
@@ -26,7 +27,7 @@ class CampaignPageLocators(BasePageLocators):
     LOCATOR_CREATE_CAMPAIGN_BUTTON = (By.XPATH, "//*[contains(@data-class-name,'Submit') and "
                                                 "contains(@data-service-readonly,'true')]")
     LOCATOR_CREATED_CAMPAIGN = (By.XPATH, "//*[@title='{}']".format(campaign_name))
-    LOCATOR_FIND_CAMPAIGN = (By.XPATH, "//*[contains(@class,'module-searchInput')]")
+    LOCATOR_FIND_CAMPAIGN = (By.XPATH, "//input[contains(@class,'multiSelectSuggester-module-searchInput')]")
     LOCATOR_CONFIRM_FIND = (By.XPATH, "//*[contains(@class,'optionWrap')]")
     LOCATOR_CAMPAIGN_CHECKBOX = (By.XPATH, "//*[contains(@class,'module-campaignNameCell')]/input")
     LOCATOR_CAMPAIGN_MODULE_DELETE = (By.XPATH, "//*[contains(@class,'module-selectItem')]")

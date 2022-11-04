@@ -11,4 +11,4 @@ def generate_segments_name(base_segment_name):
 
 
 def generate_file_path(file_name, repo_root):
-    return os.path.join(repo_root, 'UI', 'files', file_name)
+    return os.path.join(repo_root, 'UI', 'static', file_name)

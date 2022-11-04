@@ -1,19 +1,18 @@
 import pytest
 from selenium import webdriver
-from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.chrome.options import Options
+from webdriver_manager.chrome import ChromeDriverManager
+
+from UI.locators.basic_locators import *
 from UI.pages.base_page import BasePage
 from UI.pages.campaign_page import CampaignsPage
 from UI.pages.segment_page import SegmentPage
-from UI.locators.basic_locators import *
-from UI.files.creds import creds
 
 
 @pytest.fixture()
 def driver(request):
     url = 'https://target-sandbox.my.com/#'
     options = Options()
-    options.add_experimental_option("excludeSwitches", ["ignore-certificate-errors"])
     if request.config.option.headless:
         options.add_argument('--headless')
         options.add_argument('--window-size=1280x1696')
@@ -24,14 +23,6 @@ def driver(request):
     driver.maximize_window()
     yield driver
     driver.quit()
-
-
-@pytest.fixture()
-def cookies(driver):
-    login_page = LoginPage(driver)
-    login_page.login(user=creds[0], password=creds[1])
-    cookies = driver.get_cookies()
-    return cookies
 
 
 class LoginPage(BasePage):
@@ -56,9 +47,9 @@ def segment_page(driver):
 
 @pytest.fixture()
 def create_picture_path(repo_root):
-    return os.path.join(repo_root, 'UI', 'files', 'picture.jpeg')
+    return os.path.join(repo_root, 'UI', 'static', 'picture.jpeg')
 
 
 @pytest.fixture()
 def create_audio_path(repo_root):
-    return os.path.join(repo_root, 'UI', 'files', 'audio.mp3')
+    return os.path.join(repo_root, 'UI', 'static', 'audio.mp3')
