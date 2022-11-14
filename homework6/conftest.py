@@ -16,6 +16,7 @@ def pytest_configure(config):
         mysql_client.create_top_5_requests_5xx()
         mysql_client.create_top_10_most_frequent_requests()
         mysql_client.create_top_5_requests_4xx()
+
     config.mysql_client = mysql_client
 
 
@@ -24,4 +25,3 @@ def mysql_client(request) -> MysqlClient:
     client = request.config.mysql_client
     yield client
     close_all_sessions()
-    client.execute_query(f'DROP database {client.db_name}')
