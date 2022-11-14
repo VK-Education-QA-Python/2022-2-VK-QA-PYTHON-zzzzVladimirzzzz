@@ -8,5 +8,3 @@ CONNECT_RESULT=$(awk '{print$6}' access.log | grep -c 'CONNECT'); echo -e "Об�
 OPTIONS_RESULT=$(awk '{print$6}' access.log | grep -c 'OPTIONS'); echo -e "Общее количество OPTIONS запросов:\n$OPTIONS_RESULT" >> results_bash.txt;
 TRACE_RESULT=$(awk '{print$6}' access.log | grep -c 'TRACE'); echo -e "Общее количество TRACE запросов:\n$TRACE_RESULT" >> results_bash.txt;
 PATCH_RESULT=$(awk '{print$6}' access.log | grep -c 'PATCH'); echo -e "Общее количество PATCH запросов:\n$PATCH_RESULT" >> results_bash.txt;
-
-
