@@ -35,9 +35,6 @@ class MysqlClient:
         self.execute_query(f'DROP database IF EXISTS {self.db_name}')
         self.execute_query(f'CREATE database {self.db_name}')
 
-    def drop_db(self):
-        self.execute_query(f'DROP database IF EXISTS {self.db_name}')
-
     def create_table_total_requests(self):
         if not sqlalchemy.inspect(self.engine).has_table('requests_counting'):
             TotalNumberRequests.metadata.tables['requests_counting'].create(self.engine)
