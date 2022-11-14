@@ -9,13 +9,13 @@ def pytest_configure(config):
     if not hasattr(config, 'workerinput'):
         mysql_client.create_db()
     mysql_client.connect(db_created=True)
+
     if not hasattr(config, 'workerinput'):
         mysql_client.create_table_total_requests()
         mysql_client.create_table_total_requests_by_type()
         mysql_client.create_top_5_requests_5xx()
         mysql_client.create_top_10_most_frequent_requests()
         mysql_client.create_top_5_requests_4xx()
-
     config.mysql_client = mysql_client
 
 
@@ -24,5 +24,4 @@ def mysql_client(request) -> MysqlClient:
     client = request.config.mysql_client
     yield client
     close_all_sessions()
-    if not hasattr(request.config, 'workerinput'):
-        client.execute_query(f'DROP database {client.db_name}')
+    client.execute_query(f'DROP database {client.db_name}')
