@@ -1,5 +1,6 @@
-import requests
 from urllib.parse import urljoin
+
+import requests
 
 
 class ApiClientException(Exception):
@@ -24,13 +25,8 @@ class ApiClient:
         self.session = requests.Session()
 
     def post_login(self):
-        data = {
-                    'login': self.login,
-                    'password': self.password
-                }
-        headers = {
-            'Referer': 'https://target-sandbox.my.com/'
-        }
+        data = {'login': self.login, 'password': self.password}
+        headers = {'Referer': 'https://target-sandbox.my.com/'}
 
         location = urljoin('https://auth-ac.my.com/', 'auth?lang=ru&nosavelogin=0')
         login_request = self._request(method='POST', location=location, headers=headers, data=data, expected_status=302)
@@ -47,11 +43,9 @@ class ApiClient:
 
     def login_and_get_tokens(self):
         mc_token = self.get_mc_token()
-        headers = {
-            'Cookie': f'mc={mc_token}'
-        }
-        tokens = self._request(method='GET', location='csrf', headers=headers,
-                               expected_status=200, allow_redirects=True)
+        headers = {'Cookie': f'mc={mc_token}'}
+        tokens = self._request(method='GET', location='csrf', headers=headers, expected_status=200,
+                               allow_redirects=True)
         return tokens
 
     def _request(self, method, location, headers, data=None, params=None, allow_redirects=False, expected_status=200,
@@ -69,120 +63,73 @@ class ApiClient:
         return response
 
     def post_create_campaign(self, name: str, sex: list, age_list: list, pads: list):
-        headers = {
-            'Cookie': f'csrftoken={self.session.cookies["csrftoken"]};'
-                      f'mc={self.session.cookies["mc"]};'
-                      f'sdc={self.session.cookies["sdc"]};',
-
-            'X-CSRFToken': f'{self.session.cookies["csrftoken"]}',
-        }
-        data = {"name": name, "read_only": False, "objective": "special", "targetings": {"sex": sex, "age":
-                {"age_list": age_list, "expand": False}, "pads": pads}, "mixing": "fastest",
-                "price": "0.01", "max_price": "0", "package_id": 2266}
-        request = self._request(method='POST', location='api/v2/campaigns.json',
-                                headers=headers, json=data, jsonify=True)
+        headers = {'X-CSRFToken': f'{self.session.cookies["csrftoken"]}', }
+        data = {"name": name, "read_only": False, "objective": "special",
+                "targetings": {"sex": sex, "age": {"age_list": age_list, "expand": False}, "pads": pads},
+                "mixing": "fastest", "price": "0.01", "max_price": "0", "package_id": 2266}
+        request = self._request(method='POST', location='api/v2/campaigns.json', headers=headers, json=data,
+                                jsonify=True)
         return request
 
     def get_campaigns(self, campaign_id):
-        headers = {
-            'Cookie': f'csrftoken={self.session.cookies["csrftoken"]};'
-                      f'mc={self.session.cookies["mc"]};'
-                      f'sdc={self.session.cookies["sdc"]};',
-        }
+        headers = {'Cookie': f'csrftoken={self.session.cookies["csrftoken"]};'
+                             f'mc={self.session.cookies["mc"]};'
+                             f'sdc={self.session.cookies["sdc"]};', }
         request = self._request(method='GET', location=f'api/v2/campaigns.json?_status=active&_id={campaign_id}',
                                 headers=headers)
         return request
 
     def delete_campaign(self, campaign_id):
-        headers = {
-            'Cookie': f'csrftoken={self.session.cookies["csrftoken"]};'
-                      f'mc={self.session.cookies["mc"]};'
-                      f'sdc={self.session.cookies["sdc"]};',
-
-            'X-CSRFToken': f'{self.session.cookies["csrftoken"]}',
-        }
+        headers = {'X-CSRFToken': f'{self.session.cookies["csrftoken"]}', }
 
         request = self._request(method='DELETE', location=f'api/v2/campaigns/{campaign_id}.json', headers=headers,
                                 expected_status=204)
         return request
 
     def post_create_segment(self, name: str, object_type: str, params: dict, pass_condition: int):
-        headers = {
-            'Cookie': f'csrftoken={self.session.cookies["csrftoken"]};'
-                      f'mc={self.session.cookies["mc"]};'
-                      f'sdc={self.session.cookies["sdc"]};',
-
-            'X-CSRFToken': f'{self.session.cookies["csrftoken"]}',
-        }
-        data = {"name": name, "pass_condition": pass_condition, "relations": [
-               {"object_type": object_type, "params": params}], "logicType": "or"}
+        headers = {'X-CSRFToken': f'{self.session.cookies["csrftoken"]}', }
+        data = {"name": name, "pass_condition": pass_condition,
+                "relations": [{"object_type": object_type, "params": params}], "logicType": "or"}
         request = self._request(method='POST', location='api/v2/remarketing/segments.json', headers=headers, json=data,
                                 jsonify=True)
         return request
 
     def delete_segment(self, segment_id):
-        headers = {
-            'Cookie': f'csrftoken={self.session.cookies["csrftoken"]};'
-                      f'mc={self.session.cookies["mc"]};'
-                      f'sdc={self.session.cookies["sdc"]};',
-
-            'X-CSRFToken': f'{self.session.cookies["csrftoken"]}',
-        }
+        headers = {'X-CSRFToken': f'{self.session.cookies["csrftoken"]}', }
 
         request = self._request(method='DELETE', location=f'api/v2/remarketing/segments/{segment_id}.json',
-                                headers=headers,
-                                expected_status=204)
+                                headers=headers, expected_status=204)
         return request
 
     def get_segments(self):
-        headers = {
-            'Cookie': f'csrftoken={self.session.cookies["csrftoken"]};'
-                      f'mc={self.session.cookies["mc"]};'
-                      f'sdc={self.session.cookies["sdc"]};'
-        }
-        return self._request(method='GET', location=f'api/v2//remarketing/segments.json?limit=100',
-                             headers=headers)
+        headers = {'Cookie': f'csrftoken={self.session.cookies["csrftoken"]};'
+                             f'mc={self.session.cookies["mc"]};'
+                             f'sdc={self.session.cookies["sdc"]};'}
+        return self._request(method='GET', location=f'api/v2//remarketing/segments.json?limit=100', headers=headers)
 
     def get_object_id(self, group_link: str):
-        headers = {
-            'Cookie': f'csrftoken={self.session.cookies["csrftoken"]};'
-                      f'mc={self.session.cookies["mc"]};'
-                      f'sdc={self.session.cookies["sdc"]};'
-        }
-        return self._request(method='GET', location=f'api/v2/vk_groups.json?_q={group_link}',
-                             headers=headers)
+        headers = {'Cookie': f'csrftoken={self.session.cookies["csrftoken"]};'
+                             f'mc={self.session.cookies["mc"]};'
+                             f'sdc={self.session.cookies["sdc"]};'}
+        return self._request(method='GET', location=f'api/v2/vk_groups.json?_q={group_link}', headers=headers)
 
     def post_create_data_source(self, object_id: int):
-        headers = {
-            'Cookie': f'csrftoken={self.session.cookies["csrftoken"]};'
-                      f'mc={self.session.cookies["mc"]};'
-                      f'sdc={self.session.cookies["sdc"]};',
-
-            'X-CSRFToken': f'{self.session.cookies["csrftoken"]}',
-        }
+        headers = {'X-CSRFToken': f'{self.session.cookies["csrftoken"]}', }
         data = {"object_id": object_id}
 
         return self._request(method='POST', location='api/v2/remarketing/vk_groups.json', headers=headers, json=data,
                              expected_status=201)
 
     def delete_created_data_source(self, data_source_id):
-        headers = {
-            'Cookie': f'csrftoken={self.session.cookies["csrftoken"]};'
-                      f'mc={self.session.cookies["mc"]};'
-                      f'sdc={self.session.cookies["sdc"]};',
-
-            'X-CSRFToken': f'{self.session.cookies["csrftoken"]}',
-        }
+        headers = {'X-CSRFToken': f'{self.session.cookies["csrftoken"]}', }
 
         return self._request(method='DELETE', location=f'api/v2/remarketing/vk_groups/{data_source_id}.json',
                              headers=headers, expected_status=204)
 
     def get_data_sources_list(self):
-        headers = {
-            'Cookie': f'csrftoken={self.session.cookies["csrftoken"]};'
-                      f'mc={self.session.cookies["mc"]};'
-                      f'sdc={self.session.cookies["sdc"]};'
-        }
+        headers = {'Cookie': f'csrftoken={self.session.cookies["csrftoken"]};'
+                             f'mc={self.session.cookies["mc"]};'
+                             f'sdc={self.session.cookies["sdc"]};'}
 
         return self._request(method='GET', location=f'api/v2/remarketing/vk_groups.json', headers=headers,
                              expected_status=200)
